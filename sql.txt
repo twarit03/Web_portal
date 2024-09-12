@@ -1,0 +1,125 @@
+create database webportal;
+
+use webportal;
+
+
+create table login(
+     username varchar(255),
+     pwd varchar(255),
+     type varchar(255),
+     primary key(username),
+     check (type IN('admin', 'student', 'teacher'))
+     );
+
+
+
+create table teacher(
+     tusername varchar(255),
+     name varchar(255),
+     phone bigint,
+     address varchar(255),
+     email varchar(255),
+     pwd varchar(255),
+     primary key(tusername),
+     foreign key(tusername) references login(username));
+
+
+create table admin(
+     ausername varchar(255),
+     name varchar(255),
+     phone bigint,
+     address varchar(255),
+     email varchar(255),
+     pwd varchar(255),
+     primary key(ausername),
+     foreign key(ausername) references login(username));
+
+
+create table student(
+     susername varchar(255),
+     name varchar(255),
+     phone bigint,
+     address varchar(255),
+     email varchar(255),
+     pwd varchar(255),
+     primary key(susername),
+     foreign key(susername) references login(username));
+
+ 
+create table course(
+     cid varchar(255),
+     cname varchar(255),
+     duration varchar(255),
+     start date,
+     end date,
+     totalseats integer,
+     seatsleft integer,
+     primary key(cid, cname),
+     check (seatsleft>0));
+
+
+create table tcourse(
+     cid varchar(255),
+     tusername varchar(255),
+     cname varchar(255),
+     tname varchar(255),
+     primary key(cid, tusername),
+     foreign key(cid) references course(cid),
+     foreign key(tusername) references teacher(tusername));
+
+
+create table scourse(
+     cid varchar(255),
+     susername varchar(255),
+     cname varchar(255),
+     sname varchar(255),
+     primary key(cid, susername),
+     foreign key(cid) references course(cid),
+     foreign key(susername) references student(susername));
+
+
+create table fine(
+     susername varchar(255),
+     fid integer,
+     amount integer,
+     description varchar(255),
+     primary key(susername, fid),
+     foreign key(susername) references student(susername));
+
+
+create table marks(
+     cid varchar(255),
+     susername varchar(255),
+     testname varchar(255),
+     cname varchar(255),
+     sname varchar(255),
+     marks integer,
+     primary key(cid, susername, testname),
+     foreign key(cid) references course(cid),
+     foreign key(susername) references student(susername));
+
+
+create table attendance(
+     cid varchar(255),
+     susername varchar(255),
+     attendancedate date,
+     start time,
+     end time,
+     cname varchar(255),
+     sname varchar(255),
+     status varchar(255),
+     primary key(cid, susername, attendancedate, start, end),
+     foreign key(cid) references course(cid),
+     foreign key(susername) references student(susername));
+
+
+create table temp(
+    username varchar(255),
+    pwd varchar(255),
+    type varchar(255));
+
+
+insert into login(username, pwd, type) values('abcd', 'abcd', 'admin');
+
+
+insert into admin values('abcd', 'abcd', 1212121212, 'jiit noida', 'abcd@gmail.com', 'abcd');
